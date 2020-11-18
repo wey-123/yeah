@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- http://www.lawebdelprogramador.com/ -->
+    <meta charset="utf-8">
+    <title>adivina un número entre 1 y 100</title>
+    <style>
+        .acertado {color:#f00;font-weight:bold;}
+        .fin      {font-weight:bold;}
+        .error    {color:#ccc;}
+        body{
+            background: linear-gradient(to right, #ff0066 0%, #ffcc66 100%);
+ 
+            width: 630px;
+            margin: auto;
+        }
+        h1{
+            text-align: center;
+            color: #6600cc;
+            font-size: 35px;
+            font-family: 'Stalinist One', cursive;
+
+        }
+        p{
+           text-align: center;
+           color: #333399;
+           font-size: 25px;
+           font-family: 'Concert One', cursive;
+       }
+       form{
+           color: #333399;
+           font-size: 25px;
+           font-family: 'Concert One', cursive;
+
+       }
+       input{
+            text-align: center;
+            color: #6600cc;
+            font-size: 35px;
+            font-family: 'Stalinist One', cursive;
+
+       }
+       div{
+            color: #cc3300;
+            font-size: 25px;
+       }
+
+       
+    </style>
+    <script>
+        // buscamos un numero aleatorio entre 1 y 100
+        var numeroAdivinar=Math.floor((Math.random()*100)+1);
+        var contadorRespuestas=0;
+ 
+        function adivinar()
+        {
+            // obtenemos el numero de respuestas posibles
+            var numeroRespuestas=document.getElementById("numeroRespuestas").value;
+ 
+            if(document.getElementById("numeroRespuestas").disabled==false)
+            {
+                if(isNumber(numeroRespuestas) && numeroRespuestas>0)
+                {
+                    document.getElementById("numeroRespuestas").disabled=true;
+                    document.getElementById("numero").disabled=false;
+                    document.getElementById("numero").focus();
+                }
+            }else{
+                // obtenemos el contenido del div que contiene las respuestas
+                var respuestas=document.getElementById("respuestas").innerHTML;
+ 
+                if(contadorRespuestas<numeroRespuestas)
+                {
+                    // obtenemos el numero introducido por el usuario
+                    var numero=document.getElementById("numero").value;
+ 
+                    if(isNumber(numero) && numero>0 && numero<100)
+                    {
+                        // aumentanos el numero de la respuesta dada
+                        contadorRespuestas+=1;
+ 
+                        if(numero>numeroAdivinar)
+                        {
+                            // El numero es superior
+ 
+                            // Añadimos un texto a las respuestas
+                            respuestas+="<br>"+numero+" - El numero que buscas es inferior";
+                            document.getElementById("numero").focus();
+                        }else if(numero<numeroAdivinar){
+                            // El numero es inferior
+ 
+                            // Añadimos un texto a las respuestas
+                            respuestas+="<br>"+numero+" - El numero que buscas es superior";
+                            document.getElementById("numero").focus();
+                        }else{
+                            // has acertado
+ 
+                            // Añadimos un texto a las respuestas
+                            respuestas+="<br><span class='acertado'>"+numero+" - HAS ACERTADO!!</span>";
+ 
+                            fin()
+                        }
+                        // vaciamos el valor del numero
+                        document.getElementById("numero").value="";
+                    }else{
+                        respuestas+="<br><span class='error'>"+numero+" - Tiene que ser un valor numerico comprendido entre 1 y 100</span>";
+                    }
+                }else{
+                    respuestas+="<br><span class='fin'>NO HAS ACERTADO!! El numero era el "+numeroAdivinar+"</span>";
+ 
+                    fin()
+                }
+ 
+                // ponemos nuevamente todas las respuestas
+                document.getElementById("respuestas").innerHTML=respuestas;
+            }
+ 
+            // devolvemos false para que el formulario no envie los valores
+            return false;
+        }
+ 
+        // Funcion que se ejecuta al finalizar el juego
+        // ya sea por haber descubierto el numero o por finalizar el numero de
+        // intentos
+        function fin()
+        {
+            // deshabilitamos el casilla de entrar el numero, y el
+            // boton de enviar
+            document.getElementById("numero").disabled=true;
+            document.getElementById("btnEnviar").disabled=true;
+        }
+ 
+        // Simple función para validar un numero
+        function isNumber(n)
+        {
+            return !isNaN(parseFloat(n)) && isFinite(n);
+        }
+    </script>
+</head>
+ 
+<body>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Stalinist+One&display=swap" rel="stylesheet">
+<h1>ADIVINA UN NUMERO ENTRE 1 Y 100</h1>
+    <p>¿Hola como estas?</p>
+    <p>Si entraste a este juego es porque quieres probar la habilidad de la adivinanza contra el CPU, en si este consiste en que tienes que dar tu numero de intentos y probar que puedes deducir el numero que esta "pensando" el computador.<br>
+    ¡tu puedessssss!<br> <br>PARA EXPLICARLO MEJOR:<br>PASO 1. Poner tu numero de intentos al momento de adivinar el numero del computador<br>PASO 2. Luego haces click donde dice enviar para que solo te permita esos intentos<br>PASO 3. Cuando realices el 2 paso te permitira introducir el numero que creas que el computador "piensa"<br>PASO 4. Ese numero del paso 3 tendra que ser entre el 1 y el 100, al momento de poner el numero haces click donde dice enviar para comprobar si es correcto<br>PASO 5. Si lo logras en los intentos que te pusiste te saldra un mensaje de aprobacion<br> PASO 6. Si no lo logras te saldra otro mensaje de desaprobacion<br></p>
+ 
+<form onsubmit="return adivinar()">
+    INDICA EL NUMERO DE INTENTOS POSIBLES:
+    <input type="text" name="numeroRespuestas" id="numeroRespuestas">
+ 
+    <br>INDICA EL NUMERO ENTRE 1 Y 100:
+    <input type="text" name="numero" id="numero" disabled>
+ 
+    <br><input type="submit" value="Enviar" id="btnEnviar">
+
+</form>
+ 
+<div id="respuestas"></div>
+ 
+</body>
+</html>
